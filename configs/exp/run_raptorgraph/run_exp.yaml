@@ -1,0 +1,117 @@
+# @package _global_
+study_prefix: RDiff
+args:
+  dry_run: false
+  overwrite: false
+  mode: run
+  python_fname: run_raptorgraph
+  seeds:
+  - 41
+  - 42
+  - 43
+  force_create_dm: false
+  batch_size: 256
+  num_workers: 0
+  pin_memory: true
+path:
+  output: tmp
+  logs: tmp/logs
+  hydra: tmp/hydra
+  dataset: data/datasets/Norman2019_raw.h5ad
+  pickle: data/pickles
+  models: data/models
+  results: data/results
+
+pl:
+  trainer:
+    max_epochs: 100
+    precision: 32
+    accelerator: gpu
+    log_every_n_steps: 1
+    enable_model_summary: false
+    enable_progress_bar: true
+    enable_checkpointing: false
+datamodule:
+  dataset_name: norman-cpa_raw
+  kwargs:
+    mode: control_perturb
+    val_size: 0.1
+    test_size: null
+    val_stratification_perturbs: null
+    trainval_pairing_mode: find_control
+    test_pairing_mode: find_control
+    trainval_add_identity_pairs: false
+    test_add_identity_pairs: false
+    sort_by_perturbation_status: true
+    batch_size: 256
+    label_balanced: true
+    val_label_balanced: true
+    test_label_balanced: true
+    gene_var_col: "gene_symbols"
+    cond_col: "guide_ids"
+    cond_delimiter: ","
+    control_cond_name: null
+    cell_types_col: null
+    expressed_perturbation_consistency: False
+model:
+  callbacks:
+    ena_val_unbiased_mmd_metric: false
+    ena_test_unbiased_mmd_metric: true
+    ena_crl_vae_hp_cb: false
+    ena_gi_scores_metric: true
+    gi_scores_metric-use_test_control: false
+  kwargs:
+    mmd_version: unbiased
+    mmd_strategy: dynamic
+    ena_unbiased_mmd_metric: false
+    ena_test_mmd: false
+    ena_mmd_loss: true
+    ena_triplet_loss: false
+run:
+  parameters:
+    model-kwargs-deterministic_intervention: false
+    learning_rate: 0.0001
+    optimizer: adamw
+    adamw-kwargs-weight_decay: 0.0001
+    arch-core-encoder_type: interacting_graph_pathway
+    arch-core-hids: 904
+    arch-core-decoder_act_layer: silu
+    arch-core-weight_init_mode: trunc_normal
+    arch-core-num_graphs: 8
+    arch-core-graph_act_layer: silu
+    arch-core-graph_bias: true
+    arch-core-graph_norm_layer: batch_norm_1d
+    arch-core-graph_norm_scope: per_pathway
+    arch-core-pathway_bias: true
+    arch-core-clip_output: false
+    arch-core-clip_value:
+    - 0
+    - 1
+    arch-core-out_nonneg: true
+    arch-interact-interaction_weight_sharing: per_pathway
+    arch-interact-num_interaction_blocks: 3
+    arch-interact-interaction_act_layer: silu
+    arch-interact-interaction_use_norm: true
+    arch-interact-interaction_use_residual: true
+    arch-modulator-modulator_state_context_mode: raw
+    arch-modulator-modulator_bool_embedding_dim: 18
+    arch-modulator-modulator_gene_hidden_dim: null
+    arch-modulator-modulator_gene_output_dim: 99
+    arch-modulator-modulator_gene_num_layers: 3
+    arch-modulator-modulator_detach_context: false
+    arch-modulator-modulator_fusion_mode: concat
+    arch-modulator-modulator_tower_norm_layer: layer_norm
+    arch-modulator-modulator_head_hidden_dim: 126
+    arch-modulator-modulator_head_num_layers: 2
+    arch-modulator-modulator_zero_init_head: false
+    arch-modulator-modulator_act_layer: silu
+    arch-modulator-modulator_use_residual: true
+    arch-dagma-dagma_w_threshold: 0.4025
+    arch-dagma-dagma_force_dag: false
+    arch-dagma-dagma_norm_layer: null
+    arch-misc-mode: deterministic
+    num_pathways_mult: 1.04
+    alpha: 0.197
+    kl_beta: 0.447
+    dagma_mu: 0.27
+    dagma_lambda1: 0.052

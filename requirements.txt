@@ -1,0 +1,50 @@
+# RAPTORGraph - Unified Requirements
+
+## Development Tools
+autopep8
+pylint
+pylance
+GitPython
+
+## Utilities
+tqdm
+
+## File Formats
+h5py
+pyjson5
+
+## Scientific Computing
+numpy
+pandas
+scipy
+
+## Plotting
+matplotlib
+plotly
+
+## Experiment Tracking
+hydra-core
+tensorboard
+tensorboardX
+
+## Metrics
+torchmetrics
+pytorch-ignite
+pytorch_metric_learning
+
+
+## Optimal Transport
+POT
+
+## Machine Learning
+scikit-learn
+umap-learn
+
+## Deep Learning
+torch
+lightning
+timm
+einops
+
+## scRNA-seq Analysis
+scanpy

@@ -1,0 +1,49 @@
+#! -----------------------------------------------------------------------------
+#! HYDRA CONFIGURATION (DO NOT CHANGE)
+#! -----------------------------------------------------------------------------
+#? This section configures Hydra's core behavior.
+#? `chdir: False` prevents Hydra from changing the working directory.
+#? `run.dir` sets up a unique, timestamped output directory for each run,
+#? which is essential for organizing logs and artifacts.
+hydra:
+  job:
+    chdir: False
+  run:
+    dir: ${path.hydra}/${hydra:runtime.choices.exp}/${now:%Y-%m-%d_%H-%M-%S}
+
+#! -----------------------------------------------------------------------------
+#! PROJECT & STUDY CONFIGURATION
+#! -----------------------------------------------------------------------------
+study_prefix: RDiff
+
+args:
+  #? --- Core Arguments (MUST be set in the experiment's YAML file or command line) ---
+  dry_run: ???       #? Set to true to disable logging and persistent storage for quick tests.
+  overwrite: ???     #? (Optional) Add logic for overwriting previous runs if needed.
+  mode: run
+
+  #? --- PyTorch Lightning Specific Arguments ---
+  #? These can be ignored if you are not using PyTorch Lightning.
+  # max_epochs: ???    #? The maximum number of training epochs for each trial.
+  # precision: 32      #? Floating point precision (e.g., 16, 32, "bf16").
+  # accelerator: gpu   #? The hardware accelerator to use (e.g., "cpu", "gpu", "mps").
+
+#? --- Database and Path Configurations ---
+#? These sections are typically defined in separate config files (e.g., `configs/db/default.yaml`)
+#? and are left here as placeholders to show the structure.
+path: ???
+
+#! -----------------------------------------------------------------------------
+#! PYTORCH LIGHTNING TRAINER CONFIGURATION
+#! -----------------------------------------------------------------------------
+#? This section defines the default arguments for the `lightning.Trainer`.
+#? These settings can be overridden in specific experiment configs.
+pl:
+  trainer:
+    max_epochs: ${args.max_epochs}
+    precision: ${args.precision}
+    accelerator: ${args.accelerator}
+    log_every_n_steps: 1
+    enable_model_summary: False
+    enable_progress_bar: ${args.dry_run}
+    enable_checkpointing: false

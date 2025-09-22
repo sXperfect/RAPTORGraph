@@ -1,0 +1,3 @@
+from .discrepancy_vae.mmd_loss import DiscrepancyVAE_MultiKernelMaximumMeanDiscrepancy
+from .sena.mmd_loss import SENA_MultikernelMaximumMeanDiscrepancy
+from .sena.gaussian_kld_loss import SENA_GaussianVAEKLDivergenceLoss
