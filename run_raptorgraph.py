@@ -394,8 +394,8 @@ def objective_f(
             if values.nunique() > 1:
                 final_metrics[f"agg/var/{metric_name}"] = values.var()
 
-        result_path = result_path / f"{cfg.args.python_fname}" / f"{hydra_cfg.runtime.choices['exp/run_raptorgraph']}"
-        _dump_json(final_metrics, seed_result_path /  "metrics.json")
+        result_fpath = result_path / f"{cfg.args.python_fname}" / f"{hydra_cfg.runtime.choices['exp/run_raptorgraph']}"
+        _dump_json(final_metrics, result_fpath /  "metrics.json")
     else:
         #? For a single run, the metrics are not aggregated.
         final_metrics = all_seed_metrics[0]
